@@ -19,24 +19,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body>
+<body data-has-prediction="{{ 'true' if prediction else 'false' }}">
     <!-- Top Navigation / Academic Header -->
     <nav class="academic-navbar">
-        <div class="container-fluid max-layout-width d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-3">
+        <div class="container-fluid max-layout-width d-flex justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 gap-md-3 navbar-brand-group">
                 <!-- Ganti icon ini dengan logo Universitas/Fakultas Anda nanti -->
-                <div class="university-logo-placeholder">
+                <div class="university-logo-placeholder flex-shrink-0">
                     <i class="bi bi-bank2"></i>
                 </div>
-                <div>
+                <div class="navbar-text-group">
                     <h1 class="navbar-title">Deteksi Citra Wajah Generatif</h1>
                     <p class="navbar-subtitle">Implementasi Arsitektur EfficientNet-B3</p>
                 </div>
             </div>
             <div class="d-flex align-items-center">
                 <a href="/history" class="history-btn">
-                    <i class="bi bi-clock-history me-2"></i>
-                    Riwayat Prediksi
+                    <i class="bi bi-clock-history"></i>
+                    <span class="history-btn-label">Riwayat Prediksi</span>
                 </a>
             </div>
         </div>
@@ -47,7 +47,7 @@
         <!-- SECTION 1: Model Metrics Evaluation -->
         <section class="metrics-section mb-4">
             <h5 class="section-title">Evaluasi Performa Model</h5>
-            <div class="row g-3">
+            <div class="row g-2 g-md-3">
                 <div class="col-6 col-md-3">
                     <div class="eval-card">
                         <span class="eval-label">Akurasi Validasi</span>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="eval-card">
-                        <span class="eval-label">Presisi (Precision)</span>
+                        <span class="eval-label">Presisi</span>
                         <span class="eval-value">{{ precision|default('97.2') }}%</span>
                     </div>
                 </div>
@@ -76,10 +76,10 @@
         </section>
 
         <!-- SECTION 2: Main Dashboard -->
-        <section class="row g-4">
+        <section class="row g-3 g-lg-4">
 
             <!-- Panel Kiri: Input Data -->
-            <div class="col-lg-4">
+            <div class="col-12 col-lg-4 order-1">
                 <div class="dashboard-panel h-100">
                     <h5 class="panel-heading">Input Citra Uji</h5>
                     <div class="panel-body">
@@ -116,22 +116,22 @@
             </div>
 
             <!-- Panel Kanan: Output Prediksi -->
-            <div class="col-lg-8" id="resultArea">
+            <div class="col-12 col-lg-8 order-2" id="resultArea">
                 <div class="dashboard-panel h-100">
                     <h5 class="panel-heading">Hasil Klasifikasi Sistem</h5>
 
                     <div class="panel-body">
                         {% if prediction %}
-                        <div class="row align-items-center">
+                        <div class="row align-items-center g-3">
                             <!-- Sisi Gambar Hasil -->
-                            <div class="col-md-5 mb-3 mb-md-0 text-center">
+                            <div class="col-12 col-md-5 text-center">
                                 <div class="result-image-box">
                                     <img src="{{ image_path }}" alt="Analyzed Image">
                                 </div>
                             </div>
 
                             <!-- Sisi Data Detail -->
-                            <div class="col-md-7">
+                            <div class="col-12 col-md-7">
                                 <div class="analysis-details">
                                     <div class="mb-4">
                                         <label class="detail-label">Kelas Prediksi</label>
@@ -158,7 +158,7 @@
                                         </div>
                                         <div class="progress custom-progress">
                                             <div class="progress-bar {% if prediction == 'REAL' %}bg-success{% else %}bg-danger{% endif %}"
-                                                role="progressbar" style="width: {{ confidence }}%"></div>
+                                                role="progressbar" data-width="{{ confidence }}"></div>
                                         </div>
                                     </div>
                                     {% endif %}
@@ -230,10 +230,15 @@
             document.getElementById("loadingText").style.display = "inline-flex";
         });
 
-        // Auto-scroll ke hasil jika ada prediksi
+        // Set lebar progress bar dari data attribute (bukan inline style)
         document.addEventListener("DOMContentLoaded", function () {
-            const hasResult = "{{ prediction }}";
-            if (hasResult) {
+            const progressBar = document.querySelector(".progress-bar[data-width]");
+            if (progressBar) {
+                progressBar.style.width = progressBar.dataset.width + "%";
+            }
+
+            // Auto-scroll ke hasil hanya jika benar-benar ada prediksi
+            if (document.body.dataset.hasPrediction === "true") {
                 document.getElementById("resultArea").scrollIntoView({ behavior: "smooth" });
             }
         });
