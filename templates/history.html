@@ -6,107 +6,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Prediksi</title>
 
-    <!-- Bootstrap -->
+    <!-- Google Fonts: Inter (sama seperti index.html) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-
+    <!-- Custom CSS (sama file dengan index.html) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
-    <div class="container py-5">
+    <!-- Top Navigation / Academic Header, konsisten dengan index.html -->
+    <nav class="academic-navbar">
+        <div class="container-fluid max-layout-width d-flex justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 gap-md-3 navbar-brand-group">
+                <div class="university-logo-placeholder flex-shrink-0">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div class="navbar-text-group">
+                    <h1 class="navbar-title">Riwayat Prediksi</h1>
+                    <p class="navbar-subtitle">Seluruh hasil klasifikasi yang tersimpan</p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="/" class="history-btn">
+                    <i class="bi bi-arrow-left"></i>
+                    <span class="history-btn-label">Kembali ke Beranda</span>
+                </a>
+            </div>
+        </div>
+    </nav>
 
-        <div class="page-header">
+    <main class="container-fluid max-layout-width py-4">
 
-            <div>
-                <h2 class="page-title">
-                    <i class="bi bi-clock-history me-2"></i>
-                    Riwayat Prediksi
-                </h2>
+        <section class="dashboard-panel">
+            <div class="panel-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <span>Daftar Riwayat</span>
+                {% if data %}
+                <span class="history-count">{{ data|length }} entri</span>
+                {% endif %}
             </div>
 
-        <a href="/" class="btn btn-primary back-btn mb-3">
-            <i class="bi bi-arrow-left me-2"></i>
-            Home
-        </a>
-
-        </div>
-
-    <div class="card">
-    
-        <div class="card-body p-0">
-    
-            <div class="table-responsive">
-    
-                <table class="table table-bordered table-hover align-middle">
-    
-                    <thead>
-                        <tr>
-                            <th width="8%">ID</th>
-                            <th width="28%">Nama File</th>
-                            <th width="22%">Hasil Prediksi</th>
-                            <th width="15%">Confidence</th>
-                            <th width="27%">Tanggal</th>
-                        </tr>
-                    </thead>
-    
-                    <tbody>
-    
-                        {% for row in data %}
-    
-                        <tr>
-    
-                            <td>{{ row[0] }}</td>
-    
-                            <td>{{ row[1] }}</td>
-    
-                            <td>
-    
-                                {% if row[2] == "REAL" %}
-    
-                                <span class="badge bg-success px-3 py-2">
-                                    REAL
-                                </span>
-    
-                                {% elif row[2] == "AI GENERATED" %}
-    
-                                <span class="badge bg-danger px-3 py-2">
-                                    AI GENERATED
-                                </span>
-    
-                                {% else %}
-    
-                                <span class="badge bg-warning text-dark px-3 py-2">
-                                    NO FACE
-                                </span>
-    
-                                {% endif %}
-    
-                            </td>
-    
-                            <td>
-                                <strong>{{ row[3] }}%</strong>
-                            </td>
-    
-                            <td>{{ row[4] }}</td>
-    
-                        </tr>
-    
-                        {% endfor %}
-    
-                    </tbody>
-    
-                </table>
-    
+            <div class="panel-body p-0">
+                {% if data %}
+                <div class="table-responsive">
+                    <table class="table history-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">ID</th>
+                                <th style="width: 28%;">Nama File</th>
+                                <th style="width: 22%;">Hasil Prediksi</th>
+                                <th style="width: 15%;">Confidence</th>
+                                <th style="width: 27%;">Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in data %}
+                            <tr>
+                                <td data-label="ID">{{ row[0] }}</td>
+                                <td data-label="Nama File">
+                                    <span class="filename-text">{{ row[1] }}</span>
+                                </td>
+                                <td data-label="Hasil Prediksi">
+                                    {% if row[2] == "REAL" %}
+                                    <span class="status-badge badge-safe">
+                                        <i class="bi bi-shield-check"></i> REAL
+                                    </span>
+                                    {% elif row[2] == "AI GENERATED" %}
+                                    <span class="status-badge badge-danger">
+                                        <i class="bi bi-cpu"></i> AI GENERATED
+                                    </span>
+                                    {% else %}
+                                    <span class="status-badge badge-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> NO FACE
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td data-label="Confidence">
+                                    <strong class="confidence-text">{{ row[3] }}%</strong>
+                                </td>
+                                <td data-label="Tanggal">
+                                    <span class="date-text">{{ row[4] }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h6>Belum Ada Riwayat</h6>
+                    <p>Hasil klasifikasi yang kamu jalankan akan muncul di sini.</p>
+                </div>
+                {% endif %}
             </div>
-    
-        </div>
-    
-    </div>
+        </section>
 
-    </div>
+    </main>
 
 </body>
 
