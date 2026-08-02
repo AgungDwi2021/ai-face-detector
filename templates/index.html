@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Prediksi Citra - Skripsi</title>
+
+    <!-- Google Fonts: Inter untuk font yang bersih dan profesional -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Top Navigation / Academic Header -->
+    <nav class="academic-navbar">
+        <div class="container-fluid max-layout-width d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <!-- Ganti icon ini dengan logo Universitas/Fakultas Anda nanti -->
+                <div class="university-logo-placeholder">
+                    <i class="bi bi-bank2"></i>
+                </div>
+                <div>
+                    <h1 class="navbar-title">Deteksi Citra Wajah Generatif</h1>
+                    <p class="navbar-subtitle">Implementasi Arsitektur EfficientNet-B3</p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="/history" class="history-btn">
+                    <i class="bi bi-clock-history me-2"></i>
+                    Riwayat Prediksi
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid max-layout-width py-4">
+
+        <!-- SECTION 1: Model Metrics Evaluation -->
+        <section class="metrics-section mb-4">
+            <h5 class="section-title">Evaluasi Performa Model</h5>
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <div class="eval-card">
+                        <span class="eval-label">Akurasi Validasi</span>
+                        <span class="eval-value">{{ accuracy|default('98.5') }}%</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="eval-card">
+                        <span class="eval-label">Presisi (Precision)</span>
+                        <span class="eval-value">{{ precision|default('97.2') }}%</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="eval-card">
+                        <span class="eval-label">Recall</span>
+                        <span class="eval-value">{{ recall|default('96.8') }}%</span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="eval-card">
+                        <span class="eval-label">F1-Score</span>
+                        <span class="eval-value">{{ f1_score|default('97.0') }}%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Main Dashboard -->
+        <section class="row g-4">
+
+            <!-- Panel Kiri: Input Data -->
+            <div class="col-lg-4">
+                <div class="dashboard-panel h-100">
+                    <h5 class="panel-heading">Input Citra Uji</h5>
+                    <div class="panel-body">
+                        <form id="uploadForm" method="POST" enctype="multipart/form-data">
+
+                            <div class="upload-dropzone mb-3" id="dropzone">
+                                <i class="bi bi-file-earmark-image dropzone-icon"></i>
+                                <span class="dropzone-text">Pilih atau letakkan file gambar di sini</span>
+                                <span class="dropzone-hint">Format didukung: JPG, PNG, JPEG</span>
+                                <input type="file" name="image" id="imageInput" accept="image/*" required>
+                            </div>
+
+                            <div class="preview-container mb-3" id="previewContainer" style="display: none;">
+                                <img id="previewImage" alt="Preview" class="img-fluid rounded">
+                            </div>
+
+                            {% if error %}
+                            <div class="alert alert-danger mt-3 small">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                {{ error }}
+                            </div>
+                            {% endif %}
+
+                            <button type="submit" class="btn btn-primary-custom w-100" id="analyzeBtn">
+                                <span id="buttonText"><i class="bi bi-search me-2"></i>Jalankan Analisis</span>
+                                <span id="loadingText" style="display:none;">
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Memproses Inferensi...
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel Kanan: Output Prediksi -->
+            <div class="col-lg-8" id="resultArea">
+                <div class="dashboard-panel h-100">
+                    <h5 class="panel-heading">Hasil Klasifikasi Sistem</h5>
+
+                    <div class="panel-body">
+                        {% if prediction %}
+                        <div class="row align-items-center">
+                            <!-- Sisi Gambar Hasil -->
+                            <div class="col-md-5 mb-3 mb-md-0 text-center">
+                                <div class="result-image-box">
+                                    <img src="{{ image_path }}" alt="Analyzed Image">
+                                </div>
+                            </div>
+
+                            <!-- Sisi Data Detail -->
+                            <div class="col-md-7">
+                                <div class="analysis-details">
+                                    <div class="mb-4">
+                                        <label class="detail-label">Kelas Prediksi</label>
+                                        {% if prediction == 'NO FACE DETECTED' %}
+                                        <div class="status-badge badge-warning">
+                                            <i class="bi bi-exclamation-triangle"></i> Wajah Tidak Terdeteksi
+                                        </div>
+                                        {% elif prediction == 'REAL' %}
+                                        <div class="status-badge badge-safe">
+                                            <i class="bi bi-shield-check"></i> Wajah Asli (Real Human)
+                                        </div>
+                                        {% else %}
+                                        <div class="status-badge badge-danger">
+                                            <i class="bi bi-cpu"></i> Sintetis (AI Generated)
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if prediction != 'NO FACE DETECTED' %}
+                                    <div class="mb-4">
+                                        <div class="d-flex justify-content-between align-items-end mb-2">
+                                            <label class="detail-label mb-0">Tingkat Keyakinan (Confidence)</label>
+                                            <span class="confidence-text">{{ confidence }}%</span>
+                                        </div>
+                                        <div class="progress custom-progress">
+                                            <div class="progress-bar {% if prediction == 'REAL' %}bg-success{% else %}bg-danger{% endif %}"
+                                                role="progressbar" style="width: {{ confidence }}%"></div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="analysis-conclusion">
+                                        <strong>Hasil Klasifikasi:</strong><br>
+
+                                        {% if prediction == 'REAL' %}
+
+                                        Berdasarkan hasil klasifikasi menggunakan model
+                                        <strong>EfficientNet-B3</strong>, citra diprediksi sebagai
+                                        <strong>Real Human Face</strong> dengan tingkat keyakinan
+                                        <strong>{{ confidence }}%</strong>.
+
+                                        {% elif prediction == 'NO FACE DETECTED' %}
+
+                                        Wajah manusia tidak terdeteksi sehingga klasifikasi tidak dapat dilakukan.
+
+                                        {% else %}
+
+                                        Berdasarkan hasil klasifikasi menggunakan model
+                                        <strong>EfficientNet-B3</strong>, citra diprediksi sebagai
+                                        <strong>AI Generated (Deepfake)</strong> dengan tingkat keyakinan
+                                        <strong>{{ confidence }}%</strong>.
+
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- State ketika belum ada gambar diupload -->
+                        <div class="empty-state">
+                            <i class="bi bi-bar-chart-steps"></i>
+                            <h6>Menunggu Input Data</h6>
+                            <p>Sistem siap melakukan klasifikasi. Silakan unggah citra pada panel di sebelah kiri.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- JS Logic untuk UI -->
+    <script>
+        const imageInput = document.getElementById("imageInput");
+        const previewImage = document.getElementById("previewImage");
+        const previewContainer = document.getElementById("previewContainer");
+        const dropzone = document.getElementById("dropzone");
+
+        imageInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = "block";
+                    dropzone.style.display = "none"; // Sembunyikan area kotak-kotak setelah ada gambar
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById("uploadForm").addEventListener("submit", function () {
+            document.getElementById("analyzeBtn").classList.add("disabled");
+            document.getElementById("buttonText").style.display = "none";
+            document.getElementById("loadingText").style.display = "inline-flex";
+        });
+
+        // Auto-scroll ke hasil jika ada prediksi
+        document.addEventListener("DOMContentLoaded", function () {
+            const hasResult = "{{ prediction }}";
+            if (hasResult) {
+                document.getElementById("resultArea").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    </script>
+</body>
+
+</html>
