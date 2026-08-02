@@ -1,329 +1,604 @@
-/* =========================================
-   SKRIPSI UI/UX DESIGN SYSTEM
-   Author: (Nama Anda)
-   Tema: Academic Research Dashboard
-========================================= */
 
 :root {
-    /* Color Palette - Kesan Profesional & Ilmiah */
-    --primary-dark: #0f172a;    /* Navy tua untuk header */
-    --primary-main: #1d4ed8;    /* Biru untuk tombol aktif */
-    --bg-page: #f8fafc;         /* Background halaman agak abu */
-    --card-bg: #ffffff;         /* Background panel murni putih */
-    --text-main: #334155;       /* Teks utama (tidak terlalu hitam solid) */
-    --text-muted: #64748b;      /* Teks keterangan tambahan */
-    --border-color: #e2e8f0;    /* Garis pemisah tipis */
-    
-    /* Semantic Colors */
-    --color-real: #10b981;      /* Hijau Aman */
-    --color-fake: #ef4444;      /* Merah Bahaya */
-    --color-warn: #f59e0b;      /* Kuning Peringatan */
+  --color-bg: #f3f5f9;
+  --color-surface: #ffffff;
+  --color-border: #e3e7ee;
+  --color-primary: #2954a3;
+  --color-primary-dark: #1f4180;
+  --color-text: #1c2430;
+  --color-text-muted: #6b7686;
+  --color-success: #1a9e5c;
+  --color-success-bg: #e7f7ef;
+  --color-danger: #d43b3b;
+  --color-danger-bg: #fdeceb;
+  --color-warning: #b8790c;
+  --color-warning-bg: #fef4e3;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --shadow-card: 0 1px 2px rgba(20, 30, 50, 0.04), 0 8px 24px -12px rgba(20, 30, 50, 0.10);
+
+  --max-layout-width: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-page);
-    color: var(--text-main);
-    -webkit-font-smoothing: antialiased;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Membatasi lebar maksimal agar rapi di monitor lebar dosen */
 .max-layout-width {
-    max-width: 1140px;
-    margin: 0 auto;
+  max-width: var(--max-layout-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* =========================================
-   1. ACADEMIC HEADER
-========================================= */
+/* ==========================================================================
+   Navbar
+   ========================================================================== */
+
 .academic-navbar {
-    background-color: var(--primary-dark);
-    color: white;
-    padding: 1rem 0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 14px clamp(16px, 4vw, 32px);
+}
+
+.navbar-brand-group {
+  min-width: 0; /* allow text truncation on narrow screens */
 }
 
 .university-logo-placeholder {
-    width: 48px;
-    height: 48px;
-    background-color: rgba(255,255,255,0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    border: 1px solid rgba(255,255,255,0.2);
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.navbar-text-group {
+  min-width: 0;
 }
 
 .navbar-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0;
-    letter-spacing: 0.5px;
+  font-size: clamp(0.9rem, 1.3vw + 0.5rem, 1.2rem);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .navbar-subtitle {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    margin: 0;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  margin: 2px 0 0;
+  font-weight: 500;
 }
 
-/* =========================================
-   2. EVALUATION METRICS CARDS
-========================================= */
+.history-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.history-btn:hover {
+  background: #eaeef5;
+  border-color: #d5dbe6;
+  color: var(--color-text);
+}
+
+/* ==========================================================================
+   Section headings / metrics
+   ========================================================================== */
+
 .section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1f4180;
+  margin-bottom: 12px;
 }
 
 .eval-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    border-left: 4px solid var(--primary-main);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: clamp(12px, 2vw, 18px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
 }
 
 .eval-label {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    text-transform: uppercase;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .eval-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    margin-top: 4px;
+  font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
-/* =========================================
-   3. DASHBOARD PANELS
-========================================= */
+/* ==========================================================================
+   Dashboard panels
+   ========================================================================== */
+
 .dashboard-panel {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .panel-heading {
-    background-color: #f1f5f9;
-    padding: 1rem 1.25rem;
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    border-bottom: 1px solid var(--border-color);
+  margin: 0;
+  padding: 16px clamp(16px, 3vw, 24px);
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .panel-body {
-    padding: 1.5rem;
+  padding: clamp(16px, 3vw, 24px);
+  flex: 1;
 }
 
-/* =========================================
-   4. UPLOAD AREA (Form)
-========================================= */
+/* ==========================================================================
+   Upload dropzone
+   ========================================================================== */
+
 .upload-dropzone {
-    border: 2px dashed #cbd5e1;
-    border-radius: 8px;
-    padding: 2rem 1rem;
-    text-align: center;
-    background-color: #f8fafc;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  position: relative;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  padding: clamp(24px, 6vw, 40px) 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-bg);
+  transition: border-color 0.15s ease, background 0.15s ease;
+  min-height: 160px;
+  justify-content: center;
 }
 
 .upload-dropzone:hover {
-    border-color: var(--primary-main);
-    background-color: #eff6ff;
+  border-color: var(--color-primary);
+  background: #eef2fa;
 }
 
 .upload-dropzone input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .dropzone-icon {
-    font-size: 2.5rem;
-    color: var(--primary-main);
-    display: block;
-    margin-bottom: 10px;
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  color: var(--color-primary);
 }
 
 .dropzone-text {
-    display: block;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .dropzone-hint {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.preview-container {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.preview-container img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain;
+  display: block;
+  background: var(--color-bg);
 }
 
 .btn-primary-custom {
-    background-color: var(--primary-main);
-    color: white;
-    font-weight: 600;
-    padding: 0.6rem 1rem;
-    border: none;
-    border-radius: 6px;
-    transition: 0.3s ease;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
 
-.btn-primary-custom:hover {
-    background-color: #1e3a8a;
-    color: white;
+.btn-primary-custom:hover,
+.btn-primary-custom:focus {
+  background: var(--color-primary-dark);
+  color: #fff;
 }
 
-/* =========================================
-   5. RESULT AREA
-========================================= */
+.btn-primary-custom:active {
+  transform: scale(0.99);
+}
+
+.btn-primary-custom.disabled {
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Result panel
+   ========================================================================== */
+
 .result-image-box {
-    background: #f1f5f9;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
 }
 
 .result-image-box img {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 4px;
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
+  display: block;
 }
 
 .detail-label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 8px;
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
 }
 
-/* Badges Status - Menggantikan tombol default agar lebih tebal & solid */
 .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
 }
 
-.badge-safe { background-color: #d1fae5; color: #065f46; border: 1px solid #10b981; }
-.badge-danger { background-color: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
-.badge-warning { background-color: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+.badge-safe {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.badge-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.badge-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
 
 .confidence-text {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 0.9rem;
 }
 
 .custom-progress {
-    height: 12px;
-    border-radius: 10px;
-    background-color: #e2e8f0;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-bg);
+  overflow: hidden;
 }
 
 .analysis-conclusion {
-    background-color: #f8fafc;
-    border-left: 3px solid var(--primary-main);
-    padding: 12px 16px;
-    border-radius: 4px 8px 8px 4px;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    color: var(--text-main);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
 }
 
-/* Empty State Dashboard */
 .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-muted);
+  text-align: center;
+  padding: clamp(32px, 8vw, 64px) 16px;
+  color: var(--color-text-muted);
 }
+
 .empty-state i {
-    font-size: 3rem;
-    color: #cbd5e1;
-    margin-bottom: 1rem;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  color: var(--color-border);
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.empty-state h6 {
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.empty-state p {
+  font-size: 0.88rem;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   History page — table
+   ========================================================================== */
+
+.history-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.history-table {
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.history-table thead th {
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--color-border);
+  padding: 12px clamp(12px, 2vw, 20px);
+  white-space: nowrap;
+}
+
+.history-table tbody td {
+  padding: 14px clamp(12px, 2vw, 20px);
+  border-bottom: 1px solid var(--color-border);
+  border-top: none;
+  vertical-align: middle;
+}
+
+.history-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.history-table tbody tr:hover {
+  background: var(--color-bg);
+}
+
+.filename-text {
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.date-text {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.history-table .status-badge {
+  font-size: 0.78rem;
+  padding: 6px 12px;
+}
+
+/* ==========================================================================
+   Responsive breakpoints
+   ========================================================================== */
+
+/* Tablets and small laptops */
+@media (max-width: 991.98px) {
+  .dashboard-panel {
+    margin-bottom: 0;
+  }
+}
+
+/* Phones (landscape and up) */
+@media (max-width: 767.98px) {
+  body {
+    font-size: 14.5px;
+  }
+
+  .academic-navbar {
+    padding: 12px 16px;
+  }
+
+  .navbar-brand-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .history-btn {
+    padding: 8px 10px;
+    flex-shrink: 0;
+  }
+
+  .history-btn-label {
+    display: none;
+  }
+
+  main.container-fluid {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .panel-heading {
+    padding: 14px 16px;
+    font-size: 0.8rem;
+  }
+
+  .panel-body {
+    padding: 16px;
+  }
+
+  .result-image-box img,
+  .preview-container img {
+    max-height: 240px;
+  }
+
+  /* Turn the history table into stacked cards instead of a
+     horizontally-scrolling table on phones */
+  .history-table thead {
+    display: none;
+  }
+
+  .history-table,
+  .history-table tbody,
+  .history-table tr,
+  .history-table td {
     display: block;
-}
-.empty-state h6 { font-weight: 700; color: var(--primary-dark); }
+    width: 100% !important;
+  }
 
-.history-btn{
-    display: inline-flex;
+  .history-table tbody tr {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 4px 14px;
+    margin: 12px;
+  }
+
+  .history-table tbody tr:hover {
+    background: var(--color-surface);
+  }
+
+  .history-table tbody td {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background: #ffffff;
-    color: #090909;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: .3s;
-    border: none;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--color-border);
+    text-align: right;
+  }
+
+  .history-table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .history-table tbody td::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-text-muted);
+    text-align: left;
+  }
+
+  .filename-text {
+    text-align: right;
+  }
 }
 
-.history-btn:hover{
-    background: #e9f2ff;
-    color: #084298;
-    transform: translateY(-2px);
+/* Small phones */
+@media (max-width: 479.98px) {
+  .university-logo-placeholder {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .navbar-title {
+    font-size: 0.85rem;
+  }
+
+  .navbar-subtitle {
+    font-size: 0.66rem;
+  }
+
+  .history-btn {
+    padding: 8px 10px;
+  }
+
+  .eval-card {
+    padding: 10px 12px;
+  }
+
+  .eval-value {
+    font-size: 1rem;
+  }
+
+  .upload-dropzone {
+    padding: 20px 12px;
+    min-height: 140px;
+  }
+
+  .status-badge {
+    font-size: 0.82rem;
+    padding: 7px 12px;
+  }
+
+  .analysis-conclusion {
+    font-size: 0.85rem;
+    padding: 12px 14px;
+  }
 }
 
-/* history */
-body{
-    background:#f5f7fb;
+/* On very narrow phones, keep the history button as a compact icon-only
+   circle so it never competes for space with the title */
+@media (max-width: 359.98px) {
+  .history-btn {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    border-radius: 50%;
+  }
 }
 
-.card{
-    border:none;
-    border-radius:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
-
-.table{
-    margin-bottom:0;
-    border:1px solid #dee2e6;
-}
-
-.table thead th{
-    background:#0d6efd;
-    color:#fff;
-    text-align:center;
-    vertical-align:middle;
-    border:1px solid #dee2e6;
-    padding:14px;
-}
-
-.table tbody td{
-    text-align:center;
-    vertical-align:middle;
-    border:1px solid #dee2e6;
-    padding:12px;
-}
-
-.table tbody tr:hover{
-    background:#f8fbff;
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
